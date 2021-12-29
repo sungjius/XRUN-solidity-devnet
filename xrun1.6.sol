@@ -4,12 +4,6 @@
 
 pragma solidity ^0.8.11;
 
-
-// interface tokenRecipient {
-
-// 	function receiveApproval(address _from, uint256 _value, address _token, bytes _extraData) external;
-// }
-
 contract TokenERC20  {
 
 	string public name;
