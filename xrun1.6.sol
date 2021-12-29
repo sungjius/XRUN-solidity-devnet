@@ -1,18 +1,15 @@
 /**
  *Submitted for verification at Etherscan.io on 2019-05-13
 */
-
 pragma solidity ^0.8.11;
-
 contract TokenERC20  {
-
 	string public name;
 	string public symbol;
 	uint8 public decimals = 18;
 	uint256 public totalSupply;
 	uint256 public testTimeNow;
 
-address public owner;
+	address public owner;
 	mapping (address => uint256) public balanceOf;
 	mapping (address => mapping (address => uint256)) public allowance;
 	mapping (address => bool) public frozen;
