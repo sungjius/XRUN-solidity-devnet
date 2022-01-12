@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 
 import "./IERC1155.sol";
 import "./IERC1155Receiver.sol";
-// import "./IERC1155MetadataURI.sol";
+import "./IERC1155MetadataURI.sol";
 import "./Address.sol";
 import "./Context.sol";
 import "./ERC165.sol";
@@ -17,49 +17,9 @@ import "./ERC165.sol";
  *
  * _Available since v3.1._
  */
-contract ERC1155 is Context, ERC165, IERC1155Receiver  {
+contract ERC1155Stake is Context, ERC165, IERC1155, IERC1155MetadataURI {
     using Address for address;
-    
-// 부동산정보 
-    uint256 public constant LAND = 29; 
-
-// kyc 정보 
-    mapping (address => uint256) public kycNumber;
-	mapping (address => string) public kycName;
-
-/**
-     * @dev Emitted when `value` tokens of token type `id` are transferred from `from` to `to` by `operator`.
-     */
-    event TransferSingle(address indexed operator, address indexed from, address indexed to, uint256 id, uint256 value);
-
-    /**
-     * @dev Equivalent to multiple {TransferSingle} events, where `operator`, `from` and `to` are the same for all
-     * transfers.
-     */
-    event TransferBatch(
-        address indexed operator,
-        address indexed from,
-        address indexed to,
-        uint256[] ids,
-        uint256[] values
-    );
-
-    /**
-     * @dev Emitted when `account` grants or revokes permission to `operator` to transfer their tokens, according to
-     * `approved`.
-     */
-    event ApprovalForAll(address indexed account, address indexed operator, bool approved);
-
-    /**
-     * @dev Emitted when the URI for token type `id` changes to `value`, if it is a non-programmatic URI.
-     *
-     * If an {URI} event was emitted for `id`, the standard
-     * https://eips.ethereum.org/EIPS/eip-1155#metadata-extensions[guarantees] that `value` will equal the value
-     * returned by {IERC1155MetadataURI-uri}.
-     */
-    event URI(string value, uint256 indexed id);
-
-
+     
     // Mapping from token ID to account balances
     mapping(uint256 => mapping(address => uint256)) private _balances;
 
@@ -67,31 +27,51 @@ contract ERC1155 is Context, ERC165, IERC1155Receiver  {
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
     // Used as the URI for all token types by relying on ID substitution, e.g. https://token-cdn-domain/{id}.json
-    string private _uri;
-    string private ADDRESS = "ADDRESS";
-    string private COUNTRY = "COUNTRY";
-    string private LTYPEOF = "LTYPEOF";
+    string private _uri; 
+
+    uint256 public constant StakingNumber = 1; 
+  
+    address public StakingChainID;
+    address public StakingAddress;
+    uint256 public StakingLimitAmount;
+    int8 public StakingDecimal;
+    int8 public StakingExpectation;
+    uint256 public PoolLunched;
+    uint256 public ExpireDate;
+    bool public HasClosed;
+
 
     /**
      * @dev See {_setURI}.
      */
-    constructor(string memory uri_, string memory addr_, string memory coun_, string memory ltyp_ ) {
-        _setURI(uri_);
-        ADDRESS = addr_;
-        COUNTRY = coun_;
-        LTYPEOF = ltyp_;
-        _mint(msg.sender , LAND, 100, "");
+    constructor(string memory uri_,  
+            address stakingaddress_,  
+            int8 stakingexpectation_,
+            uint256 stakinglimitamount_,
+            uint256 expiredatebydate_) {
+        _setURI(uri_); 
+        _mint(msg.sender , StakingNumber, 1, "");
+  
+        StakingAddress = stakingaddress_;
+        StakingLimitAmount = stakinglimitamount_;
+        StakingDecimal = 16;
+        StakingExpectation = stakingexpectation_;
+        PoolLunched = block.timestamp;
+        ExpireDate = block.timestamp + expiredatebydate_ * 1 days;
+
+
+        
     }
 
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    // function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, IERC165) returns (bool) {
-    //     return
-    //         interfaceId == type(IERC1155).interfaceId ||
-    //         interfaceId == type(IERC1155MetadataURI).interfaceId ||
-    //         super.supportsInterface(interfaceId);
-    // }
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, IERC165) returns (bool) {
+        return
+            interfaceId == type(IERC1155).interfaceId ||
+            interfaceId == type(IERC1155MetadataURI).interfaceId ||
+            super.supportsInterface(interfaceId);
+    }
 
     
 
@@ -159,17 +139,7 @@ contract ERC1155 is Context, ERC165, IERC1155Receiver  {
     function isApprovedForAll(address account, address operator) public view virtual override returns (bool) {
         return _operatorApprovals[account][operator];
     }
-
-    function setKyc(uint256 _identifierNumber, string memory _name) public  returns (bool success) {
-         kycNumber[ msg.sender ] = _identifierNumber;
-         kycName [ msg.sender ] = _name;
-         return true;
-    }
-
-    function getKyc() public view returns ( uint256 ){
-        return kycNumber[ msg.sender ];
-    }
-
+ 
 
     /**
      * @dev See {IERC1155-safeTransferFrom}.
