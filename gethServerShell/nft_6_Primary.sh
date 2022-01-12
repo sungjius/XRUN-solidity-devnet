@@ -1,1 +1,1 @@
-ssh ubuntu@54.169.135.228 -i ~/officer/RNlogics/xrunrpc.pem 
+ssh ubuntu@54.169.135.228 -i ~/workspace/RNlogics/xrunrpc.pem 
