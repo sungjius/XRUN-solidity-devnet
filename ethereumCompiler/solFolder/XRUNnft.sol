@@ -15,5 +15,7 @@ contract XRUNnftLands is ERC1155{
     constructor() ERC1155("http://game.xrun/api.item/eid.json"){
         _mint( msg.sender, Land, 100, "");
     }
+    function LandSellerReserve public bool (uint256 _amount, uint256 _value) {
 
+    }
 }

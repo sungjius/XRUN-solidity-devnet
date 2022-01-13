@@ -2,12 +2,12 @@ import solc from "solc";
 import { readFile } from "fs/promises";
 
 (async function compileFunc() {
-  const compileFile = await readFile("./solFolder/HelloWorld.sol", "utf8");
+  const compileFile = await readFile("./solFolder/XRUNnft.sol", "utf8");
   console.log(compileFile);
   var input = {
     language: "Solidity",
     sources: {
-      "test.sol": {
+      "XRUNnft.sol": {
         content: `${compileFile}`,
       },
     },
