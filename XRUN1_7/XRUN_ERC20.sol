@@ -196,5 +196,5 @@ mapping (address => bool) public administrators;
 
         emit Transfer(from, to, value);
     }
-	
+}
 	
