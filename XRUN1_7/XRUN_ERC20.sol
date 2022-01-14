@@ -195,6 +195,7 @@ mapping (address => bool) public administrators;
 		
 		assert(balanceOf[_customerAddress] + balanceOf[_creatorAddress] == previousBalances);
     }
+<<<<<<< HEAD
 
 	function ApproveByNFT( address _sender,address _spender,uint256 _value) external returns(bool){
 		allowance[_sender][_spender] = _value;
@@ -210,3 +211,7 @@ mapping (address => bool) public administrators;
 	}
 	
 } 
+=======
+}
+	
+>>>>>>> 685c7832e9cfc3daf76f96b9cddb7fcd73515d00
