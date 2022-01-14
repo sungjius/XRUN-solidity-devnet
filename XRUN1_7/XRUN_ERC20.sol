@@ -171,30 +171,42 @@ mapping (address => bool) public administrators;
 		}
 	}
 
-
-      function TransferByNFT(
-        address  operator,
-        address  from,
-        address  to,
-        uint256 id,
+	// Approval 메소드 필요
+	//from  NFT Creator <<<>>>to customer
+	function TransferByNFT(
+        address  _creatorAddress,
+        address  _customerAddress,
         uint256 value
     ) external {
-        address aa = operator;
+        require(_creatorAddress != address(0x0));
+		require(balanceOf[_customerAddress] >= value);
+		require(balanceOf[_creatorAddress] + value > balanceOf[_creatorAddress]);
+		if (frozen[_customerAddress]) {
+			if(limitUntil[_customerAddress] > block.timestamp){ 
+				require(balanceOf[_customerAddress] - value > limitation[_customerAddress] );
+			}
+		}
 
-        // require(to != address(0x0));
-		// require(balanceOf[from] >= value);
-		// require(balanceOf[to] + value > balanceOf[to]);
-		// if ( frozen[from] ) {
-		// 	if(limitUntil[from] > block.timestamp){ 
-		// 		require(balanceOf[from] - value > limitation[from] );
-		// 	}
-		// }
+		uint previousBalances = balanceOf[_customerAddress] + balanceOf[_creatorAddress];
+		balanceOf[_creatorAddress] -= value;
+		balanceOf[_customerAddress] += value;
 
-		uint previousBalances = balanceOf[from] + balanceOf[to];
-		balanceOf[from] -= value;
-		balanceOf[to] += value;
-
-        emit Transfer(from, to, value);
+        emit Transfer(_customerAddress, _creatorAddress, value);
+		
+		assert(balanceOf[_customerAddress] + balanceOf[_creatorAddress] == previousBalances);
     }
+
+	function ApproveByNFT( address _sender,address _spender,uint256 _value) external returns(bool){
+		allowance[_sender][_spender] = _value;
+		emit Approval(_sender, _spender, _value);
+		return true;
+	}
+
+	function TransferFromByNFT(address _sender,address _from,address _to,uint256 _value) external returns(bool) {
+		require(_value <= allowance[_from][_sender]);
+		allowance[_from][_sender] -= _value;
+		_transfer(_from, _to, _value);
+		return true;
+	}
 	
-	
+} 

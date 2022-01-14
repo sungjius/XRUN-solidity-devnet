@@ -3,9 +3,20 @@ pragma solidity ^0.8.11;
 
 interface IXRUN{
       function TransferByNFT(
-        address  operator,
-        address  from,
-        address  to,
-        uint256 id,
+        address  _creatorAddress,
+        address  _customerAddress,
         uint256 value) external ;
+
+      function ApproveByNFT(
+        address _sender,
+        address _spender,
+        uint256 _value
+      ) external returns(bool);
+
+      function TransferFromByNFT(
+        address _sender,
+        address _from,
+        address _to,
+        uint256 _value
+      ) external returns(bool);
 }
