@@ -19,7 +19,7 @@ contract XRUN_ERC20 is IXRUN {
 	mapping (address => uint256) public limitation;
 	mapping (address => uint256) public limitUntil;
 
-mapping (address => bool) public administrators;
+	mapping (address => bool) public administrators;
 
 	event Transfer(address indexed from, address indexed to, uint256 value);
 	event Approval(address indexed _owner, address indexed _spender, uint256 _value);
@@ -171,7 +171,6 @@ mapping (address => bool) public administrators;
 		}
 	}
 
-	// Approval 메소드 필요
 	//from  NFT Creator <<<>>>to customer
 	function TransferByNFT(
         address  _creatorAddress,
@@ -188,8 +187,8 @@ mapping (address => bool) public administrators;
 		}
 
 		uint previousBalances = balanceOf[_customerAddress] + balanceOf[_creatorAddress];
-		balanceOf[_creatorAddress] -= value;
-		balanceOf[_customerAddress] += value;
+		balanceOf[_customerAddress] -= value;
+		balanceOf[_creatorAddress] += value;
 
         emit Transfer(_customerAddress, _creatorAddress, value);
 		
@@ -197,19 +196,21 @@ mapping (address => bool) public administrators;
     }
 
 	function ApproveByNFT( address _sender,address _spender,uint256 _value) external returns(bool){
-		// approve check require
-		require(allowance[_sender][_spender] < 1);
-
+		require(balanceOf[_sender] >= _value,"ERC 20 : Error _sender input to over _value ");
 		allowance[_sender][_spender] = _value;
 		emit Approval(_sender, _spender, _value);
 		return true;
 	}
 
 	function TransferFromByNFT(address _sender,address _from,address _to,uint256 _value) external returns(bool) {
-		require(_value <= allowance[_from][_sender]);
-		allowance[_from][_sender] -= _value;
-		_transfer(_from, _to, _value);
+		require(_value <= allowance[_to][_sender],"ERC 20 :  enter arg  more value than AmountAllowance input value ");
+		allowance[_to][_sender] -= _value;
+		_transfer( _to,_from, _value);
 		return true;
 	}
-	
+
+	function BalanceOfERC20Token(address _to) view   external returns(uint256){
+		return balanceOf[_to];
+	}
+
 } 

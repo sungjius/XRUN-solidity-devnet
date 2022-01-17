@@ -443,26 +443,24 @@ contract XRUN_ERC1155_Stake is Context, ERC165, IERC1155, IERC1155MetadataURI {
     @ 2022 01 14
     */
 
-      function Test_ERC20transfer(
-        address _contractAddress,
+      function Test_ERC20Transfer(
         address _creatorAddress,
         address _customerAddress,
         uint256 _id,
         uint256 _amount,
         uint256 _price,
         bytes memory _data
-    ) public  {
+    ) onlySaleDate public  {
      require(
             _creatorAddress == _msgSender() || isApprovedForAll(_creatorAddress, _msgSender()),
             "ERC1155: caller is not owner nor approved"
         );
-        _ERC20Transfer(_contractAddress,_creatorAddress, _customerAddress, _id, _amount,_price,_data);
+        _ERC20Transfer(_creatorAddress, _customerAddress, _id, _amount,_price,_data);
     }
     
 
 
      function _ERC20Transfer(
-         address _contractAddress,
         address _creatorAddress,
         address _customerAddress,
         uint256 _id,
@@ -480,40 +478,49 @@ contract XRUN_ERC1155_Stake is Context, ERC165, IERC1155, IERC1155MetadataURI {
         unchecked {
             _balances[_id][_creatorAddress] = fromBalance - _amount;
         }
-        _balances[_id][_customerAddress] += _amount;
+      
 
         emit TransferSingle(operator, _creatorAddress, _customerAddress, _id, _amount);
 
-        IXRUN ixrun = IXRUN(_contractAddress); 
         ixrun.TransferByNFT(_creatorAddress , _customerAddress, _price);
-
+        _balances[_id][_customerAddress] += _amount;
         Test_setVoterList(_id,_customerAddress);
 
         _doSafeTransferAcceptanceCheck(operator, _creatorAddress, _customerAddress, _id, _amount, _data);
     }
 
-    function Test_ERC20Approve(address _spender, uint256 _amount , uint256 _value) public {
+    function Test_ERC20Approve(
+    address _spender, 
+    uint256 _amount , 
+    uint256 _value) 
+    onlySaleDate public {
         address msgSender = _msgSender();
-        ixrun.ApproveByNFT(msgSender, _spender, _value);
-        _setApprovalForAll(msgSender, _spender, true);
         require(msgSender != _spender, "ERC1155: setting approval status for self");
-        _operatorApprovals[msgSender][_spender] = true;
-        emit ApprovalForAll(msgSender, _spender, true);
+
+        ixrun.ApproveByNFT(msgSender,_spender, _value);
         AmoutAllowance[msgSender][_spender] = _amount;
+        _setApprovalForAll(msgSender, _spender, true);
+        _operatorApprovals[msgSender][_spender] = true;
+
+        emit ApprovalForAll(msgSender, _spender, true);
     }
-
-    function Test_ERC20transferFrom(address _from , address _to ,uint256 _id, uint256 _amount, uint256 _value,bytes memory _data)public{
+    function Test_ERC20transferFrom(
+        address _from , 
+        address _to ,
+        uint256 _id, 
+        uint256 _amount, 
+        uint256 _value,
+        bytes memory _data) onlySaleDate public  {
         address msgSender = _msgSender();
-
         require(
             _from == msgSender || isApprovedForAll(_from, msgSender),
             "ERC1155: caller is not owner nor approved"
         );
         require(_to != address(0), "ERC1155: transfer to the zero address");
+        require(_amount <= AmoutAllowance[_to][msgSender],"ERC1155 : enter arg  more value than AmountAllowance input value ");
 
-        ixrun.TransferFromByNFT(msgSender,_from ,_to , _value);
-        require(_amount <= AmoutAllowance[_from][msgSender]);
-		AmoutAllowance[_from][msgSender] -= _amount;
+        ixrun.TransferFromByNFT(_from,_from ,_to , _value);
+		AmoutAllowance[_to][msgSender] -= _amount;
         _safeTransferFrom(_from, _to, _id, _amount, _data);
     }
 
@@ -534,6 +541,10 @@ contract XRUN_ERC1155_Stake is Context, ERC165, IERC1155, IERC1155MetadataURI {
         emit TransferSingle(operator, address(0), _to, _id, _amount);
 
         _doSafeTransferAcceptanceCheck(operator, address(0), _to, _id, _amount, _data);
+    }
+
+    function Test_BalanceOfERC20Token(address _to) view public returns (uint256) {
+        return ixrun.BalanceOfERC20Token(_to);
     }
 
     function Test_setVoterList(uint256 _id,address _to) internal virtual {
@@ -561,7 +572,7 @@ contract XRUN_ERC1155_Stake is Context, ERC165, IERC1155, IERC1155MetadataURI {
         }
     }
 
-    function Test_getDate() view public returns(uint ,uint,uint){
+    function De_Test_getDate() view public returns(uint ,uint,uint){
         return (ExpireDate , PoolLunched,block.timestamp);
     }
     
