@@ -19,4 +19,7 @@ interface IXRUN{
         address _to,
         uint256 _value
       ) external returns(bool);
+
+      function BalanceOfERC20Token(address _to) 
+      external view returns (uint256);
 }
