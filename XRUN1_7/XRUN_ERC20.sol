@@ -4,7 +4,7 @@
 pragma solidity ^0.8.11;
 
 import "./IXRUN.sol";
-
+ 
 contract XRUN_ERC20 is IXRUN {
 	string public name;
 	string public symbol;
