@@ -10,14 +10,24 @@ interface IXRUN{
       function ApproveByNFT(
         address _sender,
         address _spender,
-        uint256 _value
+        uint256 _value,
+        address _token
       ) external returns(bool);
 
       function TransferFromByNFT(
         address _sender,
         address _from,
         address _to,
-        uint256 _value
+        uint256 _value,
+        address _token
+      ) external returns(bool);
+
+      function TransferFromByNFT(
+        address _sender,
+        address _from,
+        address _to,
+        uint256 _value,
+        address _token
       ) external returns(bool);
 
       function BalanceOfERC20Token(address _to) 
