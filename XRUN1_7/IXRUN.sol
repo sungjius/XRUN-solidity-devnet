@@ -30,6 +30,15 @@ interface IXRUN{
         address _token
       ) external returns(bool);
 
+      function TransferNFTwithDeligate(
+        address _sender,
+        address _from,
+        address _to,
+        uint256 _value,
+        address _token,
+        uint256 _placer
+      );
+      
       function BalanceOfERC20Token(address _to) 
       external view returns (uint256);
 }

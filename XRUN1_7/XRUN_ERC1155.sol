@@ -15,6 +15,7 @@ import "./IXRUN.sol";
 contract XRUN_ERC1155_Stake is Context, ERC165, IERC1155, IERC1155MetadataURI {
     using Address for address;
     
+    const XRUN = "";
 
     // Mapping from token ID to account balances
     mapping(uint256 => mapping(address => uint256)) private _balances;
@@ -571,6 +572,17 @@ contract XRUN_ERC1155_Stake is Context, ERC165, IERC1155, IERC1155MetadataURI {
             }
         }
     }
+
+    function TransferNFTwithDeligate(
+        address _sender,
+        address _from,
+        address _to,
+        uint256 _value,
+        address _token,
+        uint256 _placer
+      )  public returns(bool isComplteted) {
+          return false;
+      }
 
     function De_Test_getDate() view public returns(uint ,uint,uint){
         return (ExpireDate , PoolLunched,block.timestamp);
