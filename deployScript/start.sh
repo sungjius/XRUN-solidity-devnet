@@ -1,0 +1,1 @@
+geth --networkid 6794 \ --http --http.api "admin,debug,db,eth,net,web3,miner,personal" \ --http.port "5006" \ --port 5007 \ --vmdebug \ --nodiscover \ --datadir ./data/ \ --http.addr "127.0.0.1" \ --http.corsdomain "*" \ --allow-insecure-unlock

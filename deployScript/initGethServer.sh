@@ -9,14 +9,20 @@ genesisData='
   "config": {
     "chainId": 6794,
     "homesteadBlock": 0,
-     "byzantiumBlock": 0,
-  "constantinopleBlock": 0,
     "eip150Block": 0,
     "eip155Block": 0,
-    "eip158Block": 0
+    "eip158Block": 0,
+    "byzantiumBlock": 0,
+    "constantinopleBlock": 0,
+    "petersburgBlock": 0,
+    "istanbulBlock": 0,
+    "muirGlacierBlock": 0,
+    "berlinBlock": 0,
+    "londonBlock": 0,
+    "arrowGlacierBlock": 0
   },
   "alloc": {},
-  "coinbase": "0x3333333333333333333333333333333333333333",
+  "coinbase": "0x3c9b507678e0c7c6390d696453e4739da2a5bc44",
   "difficulty": "0x4000",
   "extraData": "",
   "gasLimit": "0x80000000",
@@ -71,7 +77,7 @@ if [ ! -e "start.sh" ]; then
     --vmdebug \
     --nodiscover \
     --datadir ./data/ \
-    --http.addr "$ipAddress"      \
+    --http.addr "'$ipAddress'"      \
     --http.corsdomain "*" \
     --allow-insecure-unlock
 '
