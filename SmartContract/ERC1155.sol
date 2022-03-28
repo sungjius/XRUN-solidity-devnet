@@ -23,6 +23,11 @@ contract ERC1155 is Context, ERC165, IERC1155Receiver  {
 // 부동산정보 
     uint256 public constant LAND = 29; 
 
+// RealEste
+    uint256 public persail = 10000;
+    // permil, as partial
+    // percent, as partial owned. 
+
 // kyc 정보 
     mapping (address => uint256) public kycNumber;
 	mapping (address => string) public kycName;
